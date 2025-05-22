@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outil de Classification des Dispositifs Médicaux</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1 { color: #2c3e50; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    select, button { width: 100%; padding: 10px; margin-top: 5px; }
+    #resultat { margin-top: 20px; font-size: 18px; font-weight: bold; color: #16a085; }
+    a.doc-link { display: block; margin-top: 5px; font-size: 14px; color: #2980b9; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h1>Outil de Classification des Dispositifs Médicaux (DM)</h1>
+
+  <form id="formulaire">
+    <label for="usage">Usage du dispositif :</label>
+    <select id="usage">
+      <option value="diagnostic">Diagnostic</option>
+      <option value="therapeutique">Thérapeutique</option>
+      <option value="prevention">Prévention</option>
+      <option value="monitoring">Monitoring</option>
+      <option value="autre">Autre</option>
+    </select>
+
+    <label for="duree">Durée d'utilisation :</label>
+    <select id="duree">
+      <option value="temporaire">Temporaire (&lt;60 min)</option>
+      <option value="court_terme">Court terme (&lt;30 jours)</option>
+      <option value="long_terme">Long terme (&gt;30 jours)</option>
+    </select>
+
+    <label for="invasif">Type de contact avec le corps :</label>
+    <select id="invasif">
+      <option value="non_invasif">Non invasif</option>
+      <option value="invasif">Invasif</option>
+      <option value="implantable">Implantable</option>
+    </select>
+
+    <label for="actif">Dispositif actif ?</label>
+    <select id="actif">
+      <option value="non">Non</option>
+      <option value="oui">Oui</option>
+    </select>
+
+    <label for="partie">Partie du corps ciblée :</label>
+    <select id="partie">
+      <option value="peau">Peau</option>
+      <option value="muqueuses">Muqueuses</option>
+      <option value="circulatoire">Système circulatoire</option>
+      <option value="nerveux">Système nerveux</option>
+      <option value="autre">Autre</option>
+    </select>
+
+    <button type="button" onclick="classerDM()">Classer le Dispositif</button>
+  </form>
+
+  <div id="resultat"></div>
+
+  <script>
+    function classerDM() {
+      const duree = document.getElementById('duree').value;
+      const invasif = document.getElementById('invasif').value;
+      const actif = document.getElementById('actif').value;
+      const partie = document.getElementById('partie').value;
+
+      let classe = "Classe I (Faible risque)";
+      let lien = "<a class='doc-link' href='https://example.com/classe1' target='_blank'>Exigences documentaires Classe I</a>";
+
+      if (invasif === 'implantable' || partie === 'circulatoire' || partie === 'nerveux') {
+        classe = "Classe III (Risque critique)";
+        lien = "<a class='doc-link' href='https://example.com/classe3' target='_blank'>Exigences documentaires Classe III</a>";
+      } else if (invasif === 'invasif' && duree === 'long_terme') {
+        classe = "Classe IIb (Risque élevé)";
+        lien = "<a class='doc-link' href='https://example.com/classe2b' target='_blank'>Exigences documentaires Classe IIb</a>";
+      } else if (invasif !== 'non_invasif' || actif === 'oui' || duree !== 'temporaire') {
+        classe = "Classe IIa (Risque modéré)";
+        lien = "<a class='doc-link' href='https://example.com/classe2a' target='_blank'>Exigences documentaires Classe IIa</a>";
+      }
+
+      document.getElementById('resultat').innerHTML = `Résultat : ${classe}<br>${lien}`;
+    }
+  </script>
+</body>
+</html>
